@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vittima o Guerriero? | Il Caffè del Lunedì Mattina</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --nero: #0f0f0f;
+    --caffe: #2c1810;
+    --ambra: #c8873a;
+    --oro: #e8b86d;
+    --panna: #f5f0e8;
+    --rosso: #c0392b;
+    --verde: #1a6b3a;
+    --grigio: #6b6b6b;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--nero);
+    color: var(--panna);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* SFONDO TEXTURE */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 20%, rgba(200,135,58,0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 80%, rgba(44,24,16,0.6) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+
+  /* HEADER */
+  .header {
+    text-align: center;
+    margin-bottom: 48px;
+    animation: fadeDown 0.8s ease both;
+  }
+
+  .caffe-badge {
+    display: inline-block;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--ambra);
+    border: 1px solid rgba(200,135,58,0.4);
+    padding: 6px 16px;
+    border-radius: 2px;
+    margin-bottom: 24px;
+  }
+
+  .titolo-hero {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(38px, 8vw, 62px);
+    font-weight: 900;
+    line-height: 1.05;
+    color: var(--panna);
+    margin-bottom: 8px;
+  }
+
+  .titolo-hero span {
+    color: var(--ambra);
+    font-style: italic;
+  }
+
+  .sottotitolo {
+    font-size: 15px;
+    color: var(--grigio);
+    margin-top: 16px;
+    font-weight: 300;
+    line-height: 1.6;
+  }
+
+  .linea-oro {
+    width: 40px;
+    height: 2px;
+    background: var(--ambra);
+    margin: 24px auto;
+  }
+
+  /* PROGRESS */
+  .progress-wrap {
+    margin-bottom: 40px;
+    animation: fadeIn 0.6s ease 0.3s both;
+  }
+
+  .progress-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    letter-spacing: 1px;
+    color: var(--grigio);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+
+  .progress-bar {
+    height: 2px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 1px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--ambra), var(--oro));
+    border-radius: 1px;
+    transition: width 0.5s ease;
+  }
+
+  /* CARD DOMANDA */
+  .card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 4px;
+    padding: 40px;
+    margin-bottom: 20px;
+    animation: slideIn 0.5s ease both;
+  }
+
+  .num-domanda {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--ambra);
+    margin-bottom: 20px;
+    font-weight: 500;
+  }
+
+  .scenario-tag {
+    display: inline-block;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--grigio);
+    background: rgba(255,255,255,0.05);
+    padding: 4px 10px;
+    border-radius: 2px;
+    margin-bottom: 16px;
+  }
+
+  .testo-domanda {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(18px, 3vw, 22px);
+    font-weight: 700;
+    line-height: 1.4;
+    color: var(--panna);
+    margin-bottom: 32px;
+  }
+
+  /* OPZIONI */
+  .opzioni {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .opzione {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 18px 20px;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    background: transparent;
+    color: var(--panna);
+    text-align: left;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 1.5;
+    width: 100%;
+  }
+
+  .opzione:hover {
+    border-color: var(--ambra);
+    background: rgba(200,135,58,0.06);
+    transform: translateX(4px);
+  }
+
+  .opzione.selezionata {
+    border-color: var(--ambra);
+    background: rgba(200,135,58,0.12);
+  }
+
+  .lettera {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    letter-spacing: 0;
+    font-weight: 500;
+    flex-shrink: 0;
+    transition: all 0.25s ease;
+    color: var(--grigio);
+  }
+
+  .opzione.selezionata .lettera {
+    background: var(--ambra);
+    border-color: var(--ambra);
+    color: var(--nero);
+  }
+
+  /* BTN AVANTI */
+  .btn-avanti {
+    display: block;
+    width: 100%;
+    padding: 18px;
+    background: var(--ambra);
+    color: var(--nero);
+    border: none;
+    border-radius: 3px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    margin-top: 8px;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .btn-avanti.visibile {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .btn-avanti:hover {
+    background: var(--oro);
+    transform: translateY(-1px);
+  }
+
+  /* RISULTATO */
+  .risultato {
+    display: none;
+    animation: fadeIn 0.8s ease both;
+  }
+
+  .risultato.visibile {
+    display: block;
+  }
+
+  .punteggio-display {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+
+  .numero-score {
+    font-family: 'Playfair Display', serif;
+    font-size: 80px;
+    font-weight: 900;
+    color: var(--ambra);
+    line-height: 1;
+  }
+
+  .su-tot {
+    font-size: 14px;
+    color: var(--grigio);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .barra-risultato {
+    height: 4px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 2px;
+    margin: 24px 0;
+    overflow: hidden;
+  }
+
+  .barra-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 1.2s ease 0.3s;
+  }
+
+  .livello-badge {
+    display: inline-block;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 2px;
+    margin-bottom: 20px;
+    font-weight: 500;
+  }
+
+  .titolo-risultato {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 5vw, 42px);
+    font-weight: 900;
+    color: var(--panna);
+    margin-bottom: 16px;
+    line-height: 1.2;
+  }
+
+  .desc-risultato {
+    font-size: 16px;
+    line-height: 1.8;
+    color: #c5bfb5;
+    margin-bottom: 24px;
+  }
+
+  .azione-card {
+    background: rgba(200,135,58,0.08);
+    border: 1px solid rgba(200,135,58,0.25);
+    border-radius: 3px;
+    padding: 24px 28px;
+    margin-bottom: 32px;
+  }
+
+  .azione-label {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--ambra);
+    margin-bottom: 10px;
+    font-weight: 500;
+  }
+
+  .azione-testo {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--panna);
+    font-weight: 400;
+  }
+
+  .firma-teo {
+    text-align: center;
+    padding-top: 32px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    margin-top: 16px;
+  }
+
+  .firma-nome {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-style: italic;
+    color: var(--ambra);
+    margin-bottom: 4px;
+  }
+
+  .firma-sub {
+    font-size: 12px;
+    color: var(--grigio);
+    letter-spacing: 1px;
+  }
+
+  .btn-riprova {
+    display: inline-block;
+    margin-top: 32px;
+    padding: 14px 32px;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 3px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--grigio);
+    cursor: pointer;
+    background: transparent;
+    transition: all 0.25s ease;
+  }
+
+  .btn-riprova:hover {
+    border-color: var(--ambra);
+    color: var(--ambra);
+  }
+
+  /* ANIMAZIONI */
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 480px) {
+    .card { padding: 28px 20px; }
+    .numero-score { font-size: 60px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="caffe-badge">☕ Il Caffè del Lunedì Mattina · #5</div>
+    <h1 class="titolo-hero">Vittima<br>o <span>Guerriero?</span></h1>
+    <div class="linea-oro"></div>
+    <p class="sottotitolo">5 scenari. Risposte oneste.<br>Scopri come reagisci davvero quando la vita ti mette alla prova.</p>
+  </div>
+
+  <!-- QUIZ -->
+  <div id="quiz">
+    <div class="progress-wrap">
+      <div class="progress-info">
+        <span id="prog-label">Domanda 1 di 5</span>
+        <span id="prog-perc">0%</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+      </div>
+    </div>
+
+    <div class="card" id="card-domanda">
+      <div class="num-domanda" id="num-dom">01 —</div>
+      <div class="scenario-tag" id="tag-scenario">Scenario</div>
+      <p class="testo-domanda" id="testo-dom"></p>
+      <div class="opzioni" id="opzioni"></div>
+    </div>
+
+    <button class="btn-avanti" id="btn-avanti" onclick="prossimaDomanda()">
+      Prossima domanda →
+    </button>
+  </div>
+
+  <!-- RISULTATO -->
+  <div class="risultato" id="risultato">
+    <div class="card">
+      <div class="punteggio-display">
+        <div class="numero-score" id="score-num">0</div>
+        <div class="su-tot">punti su 15</div>
+        <div class="barra-risultato">
+          <div class="barra-fill" id="barra-fill" style="width:0%"></div>
+        </div>
+      </div>
+
+      <div style="text-align:center; margin-bottom: 28px;">
+        <div class="livello-badge" id="livello-badge"></div>
+        <h2 class="titolo-risultato" id="titolo-ris"></h2>
+        <p class="desc-risultato" id="desc-ris"></p>
+      </div>
+
+      <div class="azione-card">
+        <div class="azione-label">⚡ La tua azione questa settimana</div>
+        <p class="azione-testo" id="azione-ris"></p>
+      </div>
+
+      <div class="firma-teo">
+        <div class="firma-nome">Con Affetto — Teo ☕</div>
+        <div class="firma-sub">uno-come-voi.com</div>
+        <button class="btn-riprova" onclick="ricomincia()">Rifai il test</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const domande = [
+  {
+    tag: "Scenario 1 — Lavoro",
+    testo: "Perdi il lavoro inaspettatamente. Cosa fa la tua mente nei primi 10 minuti?",
+    opzioni: [
+      { lettera: "A", testo: "\"Perché capita sempre a me? Non è giusto.\"", punti: 1 },
+      { lettera: "B", testo: "\"È colpa del capo, dell'azienda, del sistema.\"", punti: 2 },
+      { lettera: "C", testo: "\"Ok. Fa schifo. Cosa posso fare adesso?\"", punti: 3 }
+    ]
+  },
+  {
+    tag: "Scenario 2 — Relazioni",
+    testo: "Una persona cara ti ferisce con le parole, davanti ad altri. Come reagisci?",
+    opzioni: [
+      { lettera: "A", testo: "Ingoio tutto. Ci penso da solo dopo, in silenzio.", punti: 1 },
+      { lettera: "B", testo: "\"Non vale niente se mi tratta così. Non cambierà mai.\"", punti: 2 },
+      { lettera: "C", testo: "Mi prendo il tempo, poi gliene parlo direttamente.", punti: 3 }
+    ]
+  },
+  {
+    tag: "Scenario 3 — Fallimento",
+    testo: "Un progetto su cui hai lavorato mesi va male. Qual è il tuo pensiero dominante?",
+    opzioni: [
+      { lettera: "A", testo: "\"Sono un fallito. Non sono fatto per queste cose.\"", punti: 1 },
+      { lettera: "B", testo: "\"Le circostanze erano contro di me. Non potevo fare di più.\"", punti: 2 },
+      { lettera: "C", testo: "\"Cosa posso imparare da questo? Cosa faccio diversamente?\"", punti: 3 }
+    ]
+  },
+  {
+    tag: "Scenario 4 — Critica",
+    testo: "Qualcuno critica duramente qualcosa che hai creato — un'idea, un progetto, una scelta.",
+    opzioni: [
+      { lettera: "A", testo: "Mi chiudo. La critica mi blocca per giorni.", punti: 1 },
+      { lettera: "B", testo: "\"Chi è lui/lei per giudicare? Non capisce niente.\"", punti: 2 },
+      { lettera: "C", testo: "Ascolto. Se c'è qualcosa di utile, lo prendo. Il resto lo lascio.", punti: 3 }
+    ]
+  },
+  {
+    tag: "Scenario 5 — Il momento difficile",
+    testo: "Sei in un periodo buio. Stanchezza, dubbi, sensazione di non andare da nessuna parte. Cosa fai?",
+    opzioni: [
+      { lettera: "A", testo: "Aspetto che passi. Non ho le forze per fare altrimenti.", punti: 1 },
+      { lettera: "B", testo: "Mi sfogo con tutti, ma non cambio nulla nella pratica.", punti: 2 },
+      { lettera: "C", testo: "Faccio una cosa piccola. Una sola. Per dimostrare a me stesso che posso muovermi.", punti: 3 }
+    ]
+  }
+];
+
+const livelli = [
+  {
+    min: 5, max: 6,
+    badge: "🔴 Livello 1",
+    colore: "#c0392b",
+    titolo: "Sei intrappolato nel ruolo di vittima.",
+    desc: "Non è un giudizio — è un punto di partenza. Quando le cose vanno male, la tua mente corre verso il \"perché proprio a me?\" Questo ti protegge dal dolore a breve termine, ma ti toglie il potere. Il problema? Finché la colpa è fuori, anche la soluzione è fuori.",
+    azione: "Questa settimana, la prossima volta che qualcosa va storto, fai UNA sola cosa: prima di reagire, chiedi a te stesso \"Qual è la mia responsabilità in questo, anche minima?\" Non devi avere la risposta. Basta fare la domanda."
+  },
+  {
+    min: 7, max: 9,
+    badge: "🟠 Livello 2",
+    colore: "#e67e22",
+    titolo: "Tendi alla vittima, ma stai combattendo.",
+    desc: "Hai momenti di reattività — dai la colpa agli altri, ti blocchi sulla critica — ma hai anche la capacità di rialzarti. Il problema è che lo fai solo quando non hai altra scelta. Potresti imparare a farlo prima, come prima risposta e non come ultima.",
+    azione: "Scegli uno dei 5 scenari in cui hai risposto A o B. Questa settimana, se ti capita una situazione simile, prova consapevolmente a rispondere con la C. Solo uno. Solo una volta. Vedi come ti fa sentire."
+  },
+  {
+    min: 10, max: 11,
+    badge: "🟡 Livello 3",
+    colore: "#f1c40f",
+    titolo: "Sei a metà strada. E questo è già tanto.",
+    desc: "Metà guerriero, metà vittima. Dipende dal giorno, dal tipo di situazione, dal livello di energia. Non sei bloccato, ma non sei ancora libero. La buona notizia: hai già gli strumenti dentro di te. Devi solo scegliere di usarli più spesso, non solo quando sei in forma.",
+    azione: "Identifica in quale area della tua vita tendi più alla vittima (lavoro, relazioni, autostima). Questa settimana, in quell'area specifica, prova ad applicare la mentalità del guerriero. Un'area. Concentrata. Tutta la tua energia lì."
+  },
+  {
+    min: 12, max: 13,
+    badge: "🟢 Livello 4",
+    colore: "#27ae60",
+    titolo: "Sei un guerriero in formazione.",
+    desc: "Reagisci bene alla maggior parte delle situazioni difficili. Prendi responsabilità, cerchi soluzioni, non ti perdi nella colpa. Hai però ancora qualche punto debole — situazioni o tipi di critica che ti fanno scivolare. Ma la direzione è giusta. Continua.",
+    azione: "Il tuo lavoro questa settimana non è migliorare i punti deboli — è consolidare i punti forti. Guarda indietro: in quale momento degli ultimi 30 giorni hai reagito da vero guerriero? Ricordatelo bene. È la tua bussola."
+  },
+  {
+    min: 14, max: 15,
+    badge: "⚡ Livello 5",
+    colore: "#c8873a",
+    titolo: "Sei un guerriero. Davvero.",
+    desc: "Prendi responsabilità. Cerchi soluzioni. Non ti perdi nel lamentarti. Trasformi i fallimenti in lezioni. Questo non significa che non soffri — significa che la sofferenza non ti paralizza. Hai qualcosa di raro: la capacità di muoverti anche quando fa male.",
+    azione: "Il tuo prossimo passo non è lavorare su te stesso — è aiutare qualcuno intorno a te a fare lo stesso. Chi conosci che è intrappolato nella mentalità da vittima? Non darglielo a leggere. Mostragli, con le tue azioni, che si può reagire diversamente. Questo è il vero guerriero."
+  }
+];
+
+let domandaCorrente = 0;
+let risposte = [];
+let puntiTotali = 0;
+
+function renderDomanda() {
+  const d = domande[domandaCorrente];
+  const perc = Math.round((domandaCorrente / domande.length) * 100);
+
+  document.getElementById('prog-label').textContent = `Domanda ${domandaCorrente + 1} di ${domande.length}`;
+  document.getElementById('prog-perc').textContent = perc + '%';
+  document.getElementById('progress-fill').style.width = perc + '%';
+
+  document.getElementById('num-dom').textContent = String(domandaCorrente + 1).padStart(2,'0') + ' —';
+  document.getElementById('tag-scenario').textContent = d.tag;
+  document.getElementById('testo-dom').textContent = d.testo;
+
+  const cont = document.getElementById('opzioni');
+  cont.innerHTML = '';
+  d.opzioni.forEach((op, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'opzione';
+    btn.innerHTML = `<span class="lettera">${op.lettera}</span><span>${op.testo}</span>`;
+    btn.onclick = () => seleziona(i, op.punti);
+    cont.appendChild(btn);
+  });
+
+  document.getElementById('btn-avanti').classList.remove('visibile');
+
+  // Animazione card
+  const card = document.getElementById('card-domanda');
+  card.style.animation = 'none';
+  card.offsetHeight;
+  card.style.animation = 'slideIn 0.4s ease both';
+}
+
+function seleziona(idx, punti) {
+  document.querySelectorAll('.opzione').forEach((el, i) => {
+    el.classList.toggle('selezionata', i === idx);
+  });
+  risposte[domandaCorrente] = punti;
+  document.getElementById('btn-avanti').classList.add('visibile');
+
+  if (domandaCorrente === domande.length - 1) {
+    document.getElementById('btn-avanti').textContent = 'Vedi il risultato →';
+  }
+}
+
+function prossimaDomanda() {
+  if (risposte[domandaCorrente] === undefined) return;
+
+  if (domandaCorrente < domande.length - 1) {
+    domandaCorrente++;
+    renderDomanda();
+  } else {
+    mostraRisultato();
+  }
+}
+
+function mostraRisultato() {
+  puntiTotali = risposte.reduce((a, b) => a + b, 0);
+  const livello = livelli.find(l => puntiTotali >= l.min && puntiTotali <= l.max);
+
+  document.getElementById('progress-fill').style.width = '100%';
+  document.getElementById('prog-label').textContent = 'Completato!';
+  document.getElementById('prog-perc').textContent = '100%';
+
+  document.getElementById('quiz').style.display = 'none';
+
+  document.getElementById('score-num').textContent = puntiTotali;
+  document.getElementById('titolo-ris').textContent = livello.titolo;
+  document.getElementById('desc-ris').textContent = livello.desc;
+  document.getElementById('azione-ris').textContent = livello.azione;
+
+  const badge = document.getElementById('livello-badge');
+  badge.textContent = livello.badge;
+  badge.style.background = livello.colore + '22';
+  badge.style.color = livello.colore;
+  badge.style.border = `1px solid ${livello.colore}44`;
+
+  const barra = document.getElementById('barra-fill');
+  barra.style.background = `linear-gradient(90deg, ${livello.colore}, ${livello.colore}aa)`;
+
+  const ris = document.getElementById('risultato');
+  ris.classList.add('visibile');
+
+  setTimeout(() => {
+    barra.style.width = ((puntiTotali / 15) * 100) + '%';
+  }, 100);
+}
+
+function ricomincia() {
+  domandaCorrente = 0;
+  risposte = [];
+  puntiTotali = 0;
+  document.getElementById('risultato').classList.remove('visibile');
+  document.getElementById('quiz').style.display = 'block';
+  document.getElementById('btn-avanti').textContent = 'Prossima domanda →';
+  renderDomanda();
+}
+
+// Init
+renderDomanda();
+</script>
+</body>
+</html>
